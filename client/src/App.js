@@ -10,17 +10,19 @@ import store from "./store";
 import Alert from "../src/components/layout/Alert";
 import { loadUser } from "./actions/auth";
 import setAuthToken from "./ustils/setAuthToken";
+import DashBoard from "./components/dashboard/DashBoard";
+import PrivateRoute from "./components/routing/PrivateRoute";
 
 if(localStorage.token){
-        setAuthToken(localStorage.token);
-    }
+    setAuthToken(localStorage.token);
+}
 
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
   }, [])
+
   return (
-    // pass the imported store to the Provider
     <Provider store={store}>
       <Router>
         <Fragment>
@@ -28,7 +30,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Landing />} />
 
-            {/* Wrap all other routes in a container */}
+            {/* The '/*' path matches everything else and wraps it in the container */}
             <Route
               path="/*"
               element={
@@ -37,6 +39,17 @@ const App = () => {
                   <Routes>
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
+                    
+                    {/* FIXED: PrivateRoute is now a wrapper inside the element prop */}
+                    <Route 
+                      path="/dashboard" 
+                      element={
+                        <PrivateRoute>
+                          <DashBoard />
+                        </PrivateRoute>
+                      } 
+                    />
+                    
                   </Routes>
                 </section>
               }
