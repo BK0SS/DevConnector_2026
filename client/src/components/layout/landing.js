@@ -1,7 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router'
+import React from 'react';
+import { Link, Navigate } from 'react-router-dom'; 
+import { useSelector } from 'react-redux'; 
 
-export const Landing = () => {
+const Landing = () => {
+  
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  // In v6, use <Navigate /> instead of <Redirect />
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
   return (
     <section className="landing">
       <div className="dark-overlay">
@@ -18,6 +27,7 @@ export const Landing = () => {
         </div>
       </div>
     </section>
-  )
-}
-export default Landing
+  );
+};
+
+export default Landing;
