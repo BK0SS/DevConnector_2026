@@ -1,34 +1,55 @@
-import React, {Fragment, useEffect} from 'react'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import { getCurrentProfile } from '../../actions/profile'
-import Spinner from '../layout/Spinner'
-import { Link } from 'react-router'
+import React, { Fragment, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getCurrentProfile } from '../../actions/profile';
+import Spinner from '../layout/Spinner';
+// FIX 1: Import Link from 'react-router-dom', not 'react-router'
+import { Link } from 'react-router-dom';
+import DashBoardActions from './DashBoardActions';
 
-const DashBoard = ({getCurrentProfile, auth:{user}, profile:{profile, loading}}) => {
+const DashBoard = ({
+  getCurrentProfile,
+  auth: { user },
+  profile: { profile, loading },
+}) => {
   useEffect(() => {
     getCurrentProfile();
-  }, [])
-  return loading && profile === null ? <Spinner/> : <Fragment>
-    <h1 className='large text-primary'>Dashboard</h1>
-    <p className='lead'>
-      <i className='fas fa-user'/>Welcome {user && user.name}
-    </p>
-    {profile !== null ? (<Fragment>has</Fragment>) : (<Fragment>
-      <p>You have not setup a profile yet</p>
-      <Link to ='/create-profile' className='btn btn-primary my-1'>Create Profile</Link>
-    </Fragment>)}
-  </Fragment>
-}
+  }, [getCurrentProfile]); // FIX 2: Added dependency to useEffect array
+
+  return loading && profile === null ? (
+    <Spinner />
+  ) : (
+    <Fragment>
+      <h1 className='large text-primary'>Dashboard</h1>
+      <p className='lead'>
+        <i className='fas fa-user' /> Welcome {user && user.name}
+      </p>
+      {profile !== null ? (
+        <Fragment>
+          {/* FIX 3: Typo fixed. Was <DashBoardAction/>, now <DashBoardActions/> */}
+          <DashBoardActions />
+        </Fragment>
+      ) : (
+        <Fragment>
+          <p>You have not setup a profile yet</p>
+          <Link to='/create-profile' className='btn btn-primary my-1'>
+            Create Profile
+          </Link>
+        </Fragment>
+      )}
+    </Fragment>
+  );
+};
 
 DashBoard.propTypes = {
-    getCurrentProfile: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    profile: PropTypes.object.isRequired
-}
-const mapStateToProps = state =>({
-    auth: state.auth,
-    profile: state.profile
-})
+  getCurrentProfile: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
+};
 
-export default connect(mapStateToProps, {getCurrentProfile})(DashBoard)
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  profile: state.profile,
+});
+
+export default connect(mapStateToProps, { getCurrentProfile })(DashBoard);
