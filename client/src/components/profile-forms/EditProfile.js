@@ -1,13 +1,14 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { createProfile } from "../../actions/profile";
-// CHANGE 1: Import useNavigate, remove withRouter
+import { createProfile, getCurrentProfile } from "../../actions/profile";
 import { Link, useNavigate } from "react-router-dom";
 
-// CHANGE 2: Remove 'history' from props
-const CreateProfile = ({ createProfile }) => {
-  // CHANGE 3: Initialize the navigate hook
+const EditProfile = ({
+  createProfile,
+  getCurrentProfile,
+  profile: { profile, loading },
+}) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -26,6 +27,27 @@ const CreateProfile = ({ createProfile }) => {
   });
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+
+
+  
+  useEffect(() => {
+    if (!profile || loading) return;
+
+    setFormData({
+      company: !profile.company ? "" : profile.company,
+      website: !profile.website ? "" : profile.website,
+      location: !profile.location ? "" : profile.location,
+      status: !profile.status ? "" : profile.status,
+      githubusername: !profile.githubusername ? "" : profile.githubusername,
+      bio: !profile.bio ? "" : profile.bio,
+      skills: !profile.skills ? "" : profile.skills.join(","),
+      youtube: !profile.social ? "" : profile.social.youtube,
+      twitter: !profile.social ? "" : profile.social.twitter,
+      facebook: !profile.social ? "" : profile.social.facebook,
+      linkedin: !profile.social ? "" : profile.social.linkedin,
+      instagram: !profile.social ? "" : profile.social.instagram,
+    });
+  }, [loading, profile]);
 
   const {
     company,
@@ -47,13 +69,13 @@ const CreateProfile = ({ createProfile }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // CHANGE 4: Pass 'navigate' instead of 'history'
-    createProfile(formData, navigate);
+    // FIX: Pass 'true' to indicate this is an EDIT, not a CREATE
+    createProfile(formData, navigate, true);
   };
 
   return (
     <Fragment>
-      <h1 className="large text-primary">Create Your Profile</h1>
+      <h1 className="large text-primary">Edit Your Profile</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Let's get some information to make your
         profile stand out
@@ -226,10 +248,16 @@ const CreateProfile = ({ createProfile }) => {
   );
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
-  // history propType is no longer needed
+  getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
-// CHANGE 5: Remove withRouter wrapper at the export
-export default connect(null, { createProfile })(CreateProfile);
+const mapStateToProps = (state) => ({
+  profile: state.profile,
+});
+
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  EditProfile
+);

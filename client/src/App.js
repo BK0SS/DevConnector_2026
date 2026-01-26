@@ -13,6 +13,7 @@ import setAuthToken from "./ustils/setAuthToken";
 import DashBoard from "./components/dashboard/DashBoard";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import CreateProfile from "./components/profile-forms/CreateProfile";
+import EditProfile from "./components/profile-forms/EditProfile";
 
 if(localStorage.token){
     setAuthToken(localStorage.token);
@@ -50,11 +51,21 @@ const App = () => {
                         </PrivateRoute>
                       } 
                     />
+                    {/* create profile route*/}
                     <Route 
                       path="/create-profile" 
                       element={
                         <PrivateRoute>
                           <CreateProfile />
+                        </PrivateRoute>
+                      } 
+                    />
+                     {/* edit profile route*/}
+                    <Route 
+                      path="/edit-profile" 
+                      element={
+                        <PrivateRoute>
+                          <EditProfile />
                         </PrivateRoute>
                       } 
                     />
