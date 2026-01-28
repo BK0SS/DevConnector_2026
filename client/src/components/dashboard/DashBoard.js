@@ -6,6 +6,8 @@ import Spinner from '../layout/Spinner';
 // FIX 1: Import Link from 'react-router-dom', not 'react-router'
 import { Link } from 'react-router-dom';
 import DashBoardActions from './DashBoardActions';
+import Expirience from './Experience';
+import Education from './Education';
 
 const DashBoard = ({
   getCurrentProfile,
@@ -28,6 +30,8 @@ const DashBoard = ({
         <Fragment>
           {/* FIX 3: Typo fixed. Was <DashBoardAction/>, now <DashBoardActions/> */}
           <DashBoardActions />
+          <Expirience experience ={profile.experience}/>
+          <Education education={profile.education}/>
         </Fragment>
       ) : (
         <Fragment>
