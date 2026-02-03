@@ -5,7 +5,7 @@
   <p align="center">
     A social network for developers to connect, share, and learn.
     <br />
-    <a href="LINK_HERE"><strong>View Demo »</strong></a>
+    <a href="https://safe-woodland-61438-a1de501753e7.herokuapp.com/"><strong>View Demo »</strong></a>
     <br />
     <br />
   </p>
@@ -52,4 +52,5 @@ This project relies on the MERN stack and uses the following technologies:
 
 [Bogdan Kosulin](https://www.linkedin.com/in/bogdan-kosulin/) 
 
-Project Link: [blank]
+Project Link: https://safe-woodland-61438-a1de501753e7.herokuapp.com/
+
