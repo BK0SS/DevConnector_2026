@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import { getPost } from '../../actions/post';
 import { useParams } from 'react-router-dom';
+import PostItem from '../posts/PostItem';
+import { Link } from 'react-router-dom';
+import CommentForm from './CommentForm';
+import CommentItem from './CommentItem';
 
 
 const Post = ({ getPost, post: { post, loading }, match }) => {
@@ -16,10 +20,10 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <div>
-        {/* Render post content here */}
-        <h1>{post.text}</h1>
-      </div>
+      <Link to ='/posts' className='btn'>Back To Posts</Link>
+      <PostItem post = {post} showActions={false}/>
+      <CommentForm postId={post._id}/>
+      <div className='comments'>{post.comments.map(comment=>(<CommentItem key ={comment._id} comment= {comment} postId={post._id}/>))}</div>
     </Fragment>
   );
 };
